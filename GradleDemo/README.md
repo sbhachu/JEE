@@ -16,4 +16,11 @@ On startup the database schema is automatically created based on the domain mode
 
 Please look at the build.gradle file for a full list of dependencies.
 
+Only two endpoints are defined in the UserController:
+<ol>
+<li>http://localhost:8080/api/v1/users</li>
+<li>http://localhost:8080/api/v1/user/{id}</li>
+</ol>
+However, it is very easy to extend the UserController and to add further Controllers as needed.
 
+<b>DISCLAIMER: This is just an example, and not intended for deployment to a production server.</b>

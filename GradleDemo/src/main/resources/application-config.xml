@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/tx
+           				http://www.springframework.org/schema/tx/spring-tx.xsd
+				        http://www.springframework.org/schema/security
+				        http://www.springframework.org/schema/security/spring-security.xsd
+				        http://www.springframework.org/schema/aop
+				        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <value>classpath:server.properties</value>
+        </property>
+    </bean>
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.sbhachu.demo.service.impl"/>
+    <context:component-scan base-package="com.sbhachu.demo.dao"/>
+    <context:component-scan base-package="com.sbhachu.demo.web.controller"/>
+
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+    <aop:config>
+        <aop:advisor pointcut="execution(* com.sbhachu.demo.service..*(..))" advice-ref="afterThrowingAspect"/>
+        <aop:advisor pointcut="execution(* com.sbhachu.demo.web.controller..*(..))" advice-ref="afterThrowingAspect"/>
+        <aop:advisor pointcut="execution(* com.sbhachu.demo.service..*(..))" advice-ref="beforeServiceAspect"/>
+    </aop:config>
+
+    <bean id="afterThrowingAspect" class="com.sbhachu.demo.aop.AfterThrowingAspect"/>
+
+    <bean id="beforeServiceAspect" class="com.sbhachu.demo.aop.BeforeServiceAspect"/>
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property value="${jdbc.driver}" name="driverClassName"/>
+        <property value="${jdbc.url}" name="url"/>
+        <property value="${jdbc.username}" name="username"/>
+        <property value="${jdbc.password}" name="password"/>
+    </bean>
+
+    <security:global-method-security secured-annotations="enabled"/>
+
+    <security:http>
+        <security:intercept-url pattern="/secure/**" access="ROLE_USER"/>
+        <security:anonymous granted-authority="ROLE_ANONYMOUS"/>
+        <security:http-basic/>
+    </security:http>
+
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider ref="authenticationProvider"/>
+    </security:authentication-manager>
+
+    <bean id="authenticationProvider" class="com.sbhachu.demo.security.impl.ServerAuthenticationProvider">
+        <property name="userDetailsService" ref="userDetailsService"/>
+    </bean>
+
+    <bean id="userDetailsService" class="com.sbhachu.demo.security.impl.AuthorizedUserDetailsService"/>
+
+    <bean id="loggerListener" class="org.springframework.security.authentication.event.LoggerListener"/>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.sbhachu.demo.models"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.show_sql">${hibernate.showsql}</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+
+    <bean id="applicationConfiguration" class="com.sbhachu.demo.web.config.ApplicationConfiguration">
+        <property value="${server.host}" name="host"/>
+        <property value="${application.displayName}" name="displayName"/>
+        <property value="${manager.account.username}" name="managerAccountUsername"/>
+        <property value="${manager.account.password}" name="managerAccountPassword"/>
+        <property value="${manager.account.email}" name="managerAccountEmail"/>
+    </bean>
+
+    <context:component-scan base-package="com.sbhachu.demo.web"/>
+
+</beans>

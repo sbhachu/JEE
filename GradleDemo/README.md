@@ -18,9 +18,9 @@ Please look at the build.gradle file for a full list of dependencies.
 
 Only three endpoints are defined in the UserController:
 <ol>
-<li><b>GET:</b> http://localhost:8080/api/v1/users returns user list in JSON, secured to default user role.</li>
-<li><b>GET:</b> http://localhost:8080/api/v1/user/{id} returns user object in JSON, secured to default user role.</li>
-<li><b>POST:</b> http://localhost:8080/api/v1/user/create creates a new user record and returns object in JSON, NOT secured to allow for anonymoous sign-up</li>
+<li><b>GET: http://localhost:8080/api/v1/users</b> <i>returns user list in JSON, secured to default user role.</i></li>
+<li><b>GET: http://localhost:8080/api/v1/user/{id}</b> <i>returns user object in JSON, secured to default user role.</i></li>
+<li><b>POST: http://localhost:8080/api/v1/user/create</b> <i>creates a new user record and returns object in JSON, NOT secured to allow for anonymoous sign-up</i></li>
 </ol>
 However, it is very easy to extend the UserController and to add further Controllers as needed.
 

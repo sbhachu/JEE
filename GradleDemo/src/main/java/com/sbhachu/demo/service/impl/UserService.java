@@ -53,13 +53,15 @@ public class UserService implements IUserService {
     @Transactional(readOnly = false)
     public UserModel createUser(UserModel user) throws ServerDataAccessException {
         if (user == null)
-            throw new ServerDataAccessException("SERVER ERROR: Invalid argument.");
+            throw new ServerDataAccessException("[E]: Invalid argument.");
 
         if (user.getUsername() == null)
-            throw new ServerDataAccessException("SERVER ERROR: Username must be provided.");
+            throw new ServerDataAccessException("[E]: Username must be provided.");
 
-        if (userModelDAO.findByUsername(user.getUsername()) != null)
-            throw new ServerDataAccessException("SERVER ERROR: A user with username [" + user.getUsername() + "] already exists.");
+        if (userModelDAO.findByUsername(user.getUsername()) != null) {
+            String errorMessage = String.format("[E]: A user with username [%s] already exists.", user.getUsername());
+            throw new ServerDataAccessException(errorMessage);
+        }
 
         // ensure new accounts are created with minimal privileges
         user.setRole(UserModel.ROLE_USER);
@@ -74,13 +76,13 @@ public class UserService implements IUserService {
         Long userId = userModelDAO.create(user);
 
         if (userId == null) {
-            log.error("SERVER ERROR: Could not create User - Database User ID is null.");
-            throw new ServerDataAccessException("SERVER ERROR: An error occurred while creating the User, please try again.");
+            log.error("[E]: Could not create User - Database User ID is null.");
+            throw new ServerDataAccessException("[E]: An error occurred while creating the User, please try again.");
         }
 
         user.setId(userId);
 
-        log.info(String.format("SERVER INFO: Created new UserModel: %s ID: %s ", user.getUsername(), userId));
+        log.info(String.format("[I]: Created new UserModel: %s ID: %s ", user.getUsername(), userId));
 
         return user;
     }

@@ -1,20 +1,16 @@
 package com.sbhachu.demo.web.controller;
 
-import com.sbhachu.demo.dto.UserDTO;
-import com.sbhachu.demo.exception.ServerDataAccessException;
 import com.sbhachu.demo.models.UserModel;
 import com.sbhachu.demo.service.impl.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1")
 public class UserController {
     private static final Logger log = Logger.getLogger(UserController.class);
@@ -24,34 +20,19 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "/users", method = RequestMethod.GET, produces = "application/json")
-    public UserDTO getUsers() {
-        UserDTO dto = new UserDTO();
-
-        try {
-            List<UserModel> users = userService.getAllUsers();
-            dto.setRecords(users);
-            dto.setCount(users.size());
-            dto.setStatus("OK");
-        } catch (ServerDataAccessException exception) {
-            String errorMessage = String.format("[E]: Unable to retrieve all users. [%1$s]", exception.toString());
-            log.error("[E]: " + errorMessage);
-        }
-
-        return dto;
+    public ResponseEntity<List<UserModel>> getUsers() {
+        return new ResponseEntity<List<UserModel>>(userService.getAllUsers(), HttpStatus.OK);
     }
 
     @ResponseBody
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET, produces = "application/json")
-    public UserModel getUser(@PathVariable Long id) {
-        UserModel user = null;
+    public ResponseEntity<UserModel> getUser(@PathVariable Long id) {
+        return new ResponseEntity<UserModel>(userService.getUser(id), HttpStatus.OK);
+    }
 
-        try {
-            user = userService.getUser(id);
-        } catch (ServerDataAccessException exception) {
-            String errorMessage = String.format("[E]: Unable to retrieve all users. [%1$s]", exception.toString());
-            log.error("[E]: " + errorMessage);
-        }
-
-        return user;
+    @ResponseBody
+    @RequestMapping(value = "/user/create", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public ResponseEntity<UserModel> createUser(@RequestBody UserModel userModel) {
+        return new ResponseEntity<UserModel>(userService.createUser(userModel), HttpStatus.CREATED);
     }
 }

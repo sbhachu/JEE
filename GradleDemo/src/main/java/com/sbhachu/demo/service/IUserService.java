@@ -10,7 +10,7 @@ public interface IUserService {
 
     public UserModel getUser(Long id) throws ServerDataAccessException;
 
-    public Long createUser(UserModel user) throws ServerDataAccessException;
+    public UserModel createUser(UserModel user) throws ServerDataAccessException;
 
     public boolean updateUser(UserModel user) throws ServerDataAccessException;
 

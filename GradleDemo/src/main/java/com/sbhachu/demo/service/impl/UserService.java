@@ -10,6 +10,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,7 +21,7 @@ public class UserService implements IUserService {
     public UserModelDAO userModelDAO;
 
     @Transactional(readOnly = true)
-    @Secured("ROLE_MANAGER")
+    @Secured("ROLE_USER")
     public List<UserModel> getAllUsers() throws ServerDataAccessException {
         List<UserModel> users = userModelDAO.findAll();
 
@@ -35,7 +36,7 @@ public class UserService implements IUserService {
     }
 
     @Transactional(readOnly = true)
-    @Secured("ROLE_MANAGER")
+    @Secured("ROLE_USER")
     public UserModel getUser(Long id) throws ServerDataAccessException {
         UserModel user = userModelDAO.findById(id);
 
@@ -50,13 +51,42 @@ public class UserService implements IUserService {
     }
 
     @Transactional(readOnly = false)
-    @Secured("ROLE_MANAGER")
-    public Long createUser(UserModel user) throws ServerDataAccessException {
-        return null;
+    public UserModel createUser(UserModel user) throws ServerDataAccessException {
+        if (user == null)
+            throw new ServerDataAccessException("SERVER ERROR: Invalid argument.");
+
+        if (user.getUsername() == null)
+            throw new ServerDataAccessException("SERVER ERROR: Username must be provided.");
+
+        if (userModelDAO.findByUsername(user.getUsername()) != null)
+            throw new ServerDataAccessException("SERVER ERROR: A user with username [" + user.getUsername() + "] already exists.");
+
+        // ensure new accounts are created with minimal privileges
+        user.setRole(UserModel.ROLE_USER);
+
+        // ensure new accounts are enabled (this flag is usually used for email account activation, but for simplicity enable here)
+        user.setEnabled(true);
+
+        user.setDateCreated(new Date());
+        user.setDateModified(new Date());
+        user.setLastLogin(new Date());
+
+        Long userId = userModelDAO.create(user);
+
+        if (userId == null) {
+            log.error("SERVER ERROR: Could not create User - Database User ID is null.");
+            throw new ServerDataAccessException("SERVER ERROR: An error occurred while creating the User, please try again.");
+        }
+
+        user.setId(userId);
+
+        log.info(String.format("SERVER INFO: Created new UserModel: %s ID: %s ", user.getUsername(), userId));
+
+        return user;
     }
 
     @Transactional(readOnly = false)
-    @Secured("ROLE_MANAGER")
+    @Secured("ROLE_USER")
     public boolean updateUser(UserModel user) throws ServerDataAccessException {
         return false;
     }

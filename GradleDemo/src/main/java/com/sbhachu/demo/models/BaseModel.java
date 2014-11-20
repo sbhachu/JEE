@@ -52,4 +52,12 @@ public abstract class BaseModel implements Serializable {
         this.dateModified = dateModified;
     }
 
+    @Override
+    public String toString() {
+        return "BaseModel{" +
+                "id=" + id +
+                ", dateCreated=" + dateCreated +
+                ", dateModified=" + dateModified +
+                '}';
+    }
 }

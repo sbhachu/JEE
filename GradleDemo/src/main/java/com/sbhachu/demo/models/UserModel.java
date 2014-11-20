@@ -1,6 +1,7 @@
 package com.sbhachu.demo.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.sbhachu.demo.util.JsonDateSerializerUtil;
 
@@ -67,6 +68,7 @@ public class UserModel extends BaseModel implements Principal {
         return password;
     }
 
+    @JsonProperty("password")
     public void setPassword(String password) {
         this.password = password;
     }
@@ -97,4 +99,15 @@ public class UserModel extends BaseModel implements Principal {
         this.lastLogin = lastLogin;
     }
 
+    @Override
+    public String toString() {
+        return "UserModel{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", enabled=" + enabled +
+                ", lastLogin=" + lastLogin +
+                "} " + super.toString();
+    }
 }

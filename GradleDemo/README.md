@@ -22,6 +22,6 @@ Only three endpoints are defined in the UserController:
 <li><b>GET: http://localhost:8080/api/v1/user/{id}</b> <i>returns user object in JSON, secured to default user role.</i></li>
 <li><b>POST: http://localhost:8080/api/v1/user/create</b> <i>creates a new user record and returns object in JSON, NOT secured to allow for anonymoous sign-up</i></li>
 </ol>
-However, it is very easy to extend the UserController and to add further Controllers as needed.
+However, it is very easy to extend the UserController and to add further controllers as needed.
 
 <b>DISCLAIMER: This is just an example, and not intended for deployment to a production server.</b>

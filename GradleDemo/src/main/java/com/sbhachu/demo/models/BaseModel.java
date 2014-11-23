@@ -1,8 +1,5 @@
 package com.sbhachu.demo.models;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.sbhachu.demo.util.JsonDateSerializerUtil;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +31,6 @@ public abstract class BaseModel implements Serializable {
         this.id = id;
     }
 
-    @JsonSerialize(using = JsonDateSerializerUtil.class)
     public Date getDateCreated() {
         return dateCreated;
     }
@@ -43,7 +39,6 @@ public abstract class BaseModel implements Serializable {
         this.dateCreated = dateCreated;
     }
 
-    @JsonSerialize(using = JsonDateSerializerUtil.class)
     public Date getDateModified() {
         return dateModified;
     }

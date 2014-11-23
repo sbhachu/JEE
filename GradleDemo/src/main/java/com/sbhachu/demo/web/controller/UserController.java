@@ -19,6 +19,12 @@ public class UserController {
     public UserService userService;
 
     @ResponseBody
+    @RequestMapping(value ="/user/username/{username}", method = RequestMethod.GET)
+    public ResponseEntity<Boolean> validateUser(@PathVariable("username") String username) {
+        return new ResponseEntity<Boolean>(userService.validateUser(username), HttpStatus.OK);
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/users", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<UserModel>> getUsers() {
         return new ResponseEntity<List<UserModel>>(userService.getAllUsers(), HttpStatus.OK);
@@ -26,7 +32,7 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<UserModel> getUser(@PathVariable Long id) {
+    public ResponseEntity<UserModel> getUser(@PathVariable("id") Long id) {
         return new ResponseEntity<UserModel>(userService.getUser(id), HttpStatus.OK);
     }
 

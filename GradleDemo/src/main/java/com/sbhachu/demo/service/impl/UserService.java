@@ -50,6 +50,21 @@ public class UserService implements IUserService {
         return user;
     }
 
+    @Transactional(readOnly = true)
+    @Secured("ROLE_USER")
+    public Boolean validateUser(String username) throws ServerDataAccessException {
+        UserModel user = userModelDAO.findByUsername(username);
+
+        if (user == null) {
+            log.error(String.format("[E]: No User Record with username [%s] Found.", username));
+            throw new ServerDataAccessException(String.format("[E]: No User Record with username [%s] Found.", username));
+        }
+
+        log.info(String.format("[I]: User [%s] Record Found.", username));
+
+        return user != null;
+    }
+
     @Transactional(readOnly = false)
     public UserModel createUser(UserModel user) throws ServerDataAccessException {
         if (user == null)

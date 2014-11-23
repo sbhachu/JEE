@@ -2,8 +2,6 @@ package com.sbhachu.demo.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.sbhachu.demo.util.JsonDateSerializerUtil;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -90,7 +88,6 @@ public class UserModel extends BaseModel implements Principal {
         this.enabled = enabled;
     }
 
-    @JsonSerialize(using = JsonDateSerializerUtil.class)
     public Date getLastLogin() {
         return lastLogin;
     }

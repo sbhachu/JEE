@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+						   http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/context
+						   http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.sbhachu.oauth.demo.service.impl"/>
+    <context:component-scan base-package="com.sbhachu.oauth.demo.dao"/>
+    <context:component-scan base-package="com.sbhachu.oauth.demo.web"/>
+    <context:component-scan base-package="com.sbhachu.oauth.demo.web.controller"/>
+
+    <import resource="classpath:persistence/persistence-configuration.xml"/>
+
+    <import resource="classpath:security/security-configuration.xml"/>
+    <import resource="classpath:security/authmanager-configuration.xml"/>
+    <import resource="classpath:security/token-store-configuration.xml"/>
+    <import resource="classpath:security/client-configuration.xml"/>
+    <import resource="classpath:security/oauth-configuration.xml"/>
+    <import resource="classpath:security/endpoint-configuration.xml"/>
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:properties/server.properties"/>
+    </bean>
+
+    <bean id="applicationConfiguration" class="com.sbhachu.oauth.demo.web.config.ApplicationConfiguration">
+        <property value="${server.host}" name="host"/>
+        <property value="${application.displayName}" name="displayName"/>
+        <property value="${manager.account.firstname}" name="managerAccountFirstName"/>
+        <property value="${manager.account.lastname}" name="managerAccountLastName"/>
+        <property value="${manager.account.password}" name="managerAccountPassword"/>
+        <property value="${manager.account.email}" name="managerAccountEmail"/>
+    </bean>
+
+</beans>

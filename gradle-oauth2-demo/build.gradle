@@ -1,0 +1,69 @@
+apply plugin: 'java'
+apply plugin: 'war'
+
+sourceCompatibility = 1.8
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+//  JUnit
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+//  REST Assured
+    testCompile group: 'com.jayway.restassured', name: 'rest-assured', version: '2.4.0'
+
+//  AssertJ Core
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '1.6.1'
+
+//  PostgreSQL
+    compile group: 'postgresql', name: 'postgresql', version: '9.1-901.jdbc4'
+
+//  JSR250 Annotation
+    compile group: 'javax.annotation', name: 'jsr250-api', version: '1.0'
+
+//  Spring Framework
+    compile group: 'org.springframework', name: 'spring-aop', version: '4.1.2.RELEASE'
+    compile group: 'org.springframework', name: 'spring-aspects', version: '4.1.2.RELEASE'
+    compile group: 'org.springframework', name: 'spring-context', version: '4.1.2.RELEASE'
+    compile group: 'org.springframework', name: 'spring-core', version: '4.1.2.RELEASE'
+    compile group: 'org.springframework', name: 'spring-orm', version: '4.1.2.RELEASE'
+    compile group: 'org.springframework', name: 'spring-test', version: '4.1.2.RELEASE'
+    compile group: 'org.springframework', name: 'spring-tx', version: '4.1.2.RELEASE'
+    compile group: 'org.springframework', name: 'spring-web', version: '4.1.2.RELEASE'
+    compile group: 'org.springframework', name: 'spring-webmvc', version: '4.1.2.RELEASE'
+
+//  Spring Security
+    compile group: 'org.springframework.security', name: 'spring-security-config', version: '3.2.5.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-core', version: '3.2.5.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-web', version: '3.2.5.RELEASE'
+    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.0.4.RELEASE'
+
+//  Hibernate
+    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '4.3.7.Final'
+    compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.1.2.Final'
+
+//  Web
+    compile group: 'javax.servlet', name: 'jstl', version: '1.2'
+    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
+    providedCompile group: 'javax.servlet.jsp', name: 'jsp-api', version: '2.2'
+
+//  Jackson
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.4.2'
+
+//  Log4J
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+
+//  AspectJ
+    compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.8.2'
+    compile group: 'org.aspectj', name: 'aspectjrt', version: '1.8.2'
+
+//  Apache Commons
+    compile group: 'commons-codec', name: 'commons-codec', version: '1.9'
+
+//  ROME Tools
+    compile group: 'com.rometools', name: 'rome', version: '1.5.0'
+}

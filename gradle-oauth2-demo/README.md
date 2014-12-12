@@ -30,7 +30,7 @@ In order to access the secured REST end points, the user must provide a valid ac
 Base64.encode(client-id + ":" + secret);
 ```
 
-<b>Single Sign-In</b><br/>
+<b>Single Sign-In:</b><br/>
 ```
 curl -v -X POST \
    -H "Content-Type: application/json" \
@@ -48,10 +48,10 @@ curl -v -X POST \
     "scope": "read trust write"
 }
 ```
-<br/><br/>The above refresh token should be stored by the client application, so the access token can be refreshed as needed.
+<br/>The above refresh token should be stored by the client application, so the access token can be refreshed as needed.
 <br/><br/>The response shows that the access token is valid for 10 seconds.  This valid access token can be used to access a secured REST end-point.
 
-<b>Access REST End-Point</b><br/>
+<b>Access REST End-Point:</b><br/>
 ```
 curl -v -X GET \
   -H "Content-Type: application/json" \
@@ -84,9 +84,9 @@ curl -v -X GET \
     "error_description": "Access token expired: 53bfa41f-b85c-4a42-8e7a-1d83acefd9e7"
 }
 ```
-<br/><br/>If the access token validity expires, a new token can be requested using the refresh-token mechanism.
+<p>If the access token validity expires, a new token can be requested using the refresh-token mechanism.</p>
 
-<b>Refresh Token</b><br/>
+<b>Refresh Token:</b><br/>
 ```
 curl -v -X POST \
    -H "Content-Type: application/json" \

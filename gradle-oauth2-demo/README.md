@@ -39,7 +39,7 @@ curl -v -X POST \
 ```
 
 <b>Response:</b><br/>
-```json
+```
 {
     "access_token": "53bfa41f-b85c-4a42-8e7a-1d83acefd9e7",
     "token_type": "bearer",
@@ -60,7 +60,7 @@ curl -v -X GET \
 ```
 
 <b>Response:</b><br/>
-```json
+```
 [
     {
         "id": 1,
@@ -78,7 +78,7 @@ curl -v -X GET \
 ```
 
 <b>Error Response:</b><br/>
-```json
+```
 {
     "error": "invalid_token",
     "error_description": "Access token expired: 53bfa41f-b85c-4a42-8e7a-1d83acefd9e7"

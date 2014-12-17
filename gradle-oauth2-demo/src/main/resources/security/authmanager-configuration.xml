@@ -11,19 +11,19 @@
         <security:authentication-provider user-service-ref="clientDetailsUserService"/>
     </security:authentication-manager>
 
-    <bean id="authenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
-        <property name="userDetailsService" ref="userDetailsService"/>
+    <bean id="clientDetailsUserService"
+          class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
+        <constructor-arg ref="clientDetails"/>
     </bean>
 
-    <security:authentication-manager alias="authenticationManager">
+    <security:authentication-manager alias="userAuthenticationManager">
         <security:authentication-provider user-service-ref="userDetailsService"/>
     </security:authentication-manager>
 
     <bean id="userDetailsService" class="com.sbhachu.oauth.demo.security.AuthorizedUserDetailsService"/>
 
-    <bean id="clientDetailsUserService"
-          class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
-        <constructor-arg ref="clientDetails"/>
+    <bean id="userAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <property name="userDetailsService" ref="userDetailsService"/>
     </bean>
 
 </beans>

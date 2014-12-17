@@ -8,4 +8,9 @@
         <constructor-arg ref="dataSource"/>
     </bean>
 
+    <bean id="tokenGenerator" class="com.sbhachu.oauth.demo.security.TokenGenerator">
+        <constructor-arg ref="clientDetails"/>
+        <constructor-arg ref="tokenServices"/>
+    </bean>
+
 </beans>

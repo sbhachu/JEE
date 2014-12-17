@@ -21,10 +21,6 @@ import java.util.ArrayList;
 public class AuthorizedUserDetailsService implements UserDetailsService {
     private static Logger log = Logger.getLogger(AuthorizedUserDetailsService.class);
 
-    public static final String ROLE_USER = "ROLE_USER";
-
-    public static final String ROLE_ADMIN = "ROLE_ADMIN";
-
     private UserDaoImpl userDao;
 
     @Autowired
@@ -44,10 +40,10 @@ public class AuthorizedUserDetailsService implements UserDetailsService {
             boolean credentialsNonExpired = user.getEnabled();
             boolean accountNonLocked = user.getEnabled();
 
-            authorities.add(new SimpleGrantedAuthority(ROLE_USER));
+            authorities.add(new SimpleGrantedAuthority(Role.ROLE_USER.toString()));
 
             if (user.getRole() == Role.ROLE_ADMIN) {
-                authorities.add(new SimpleGrantedAuthority(ROLE_ADMIN));
+                authorities.add(new SimpleGrantedAuthority(Role.ROLE_ADMIN.toString()));
             }
 
             org.springframework.security.core.userdetails.User authorizedUser =

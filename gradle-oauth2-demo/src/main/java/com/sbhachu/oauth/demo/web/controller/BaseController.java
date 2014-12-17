@@ -9,10 +9,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Created by sbhachu on 05/12/2014.
  */
+@RequestMapping("/api/v1")
 public abstract class BaseController {
 
     @Autowired
@@ -26,17 +28,18 @@ public abstract class BaseController {
 
     protected User loadUserFromSecurityContext() throws ServerException {
         if (getAuthentication() instanceof OAuth2Authentication) {
-            org.springframework.security.core.userdetails.User principal =
-                    (org.springframework.security.core.userdetails.User) getAuthentication().getPrincipal();
 
-            if (principal != null) {
-                return userService.getUser(principal.getUsername());
+            Object principal = getAuthentication().getPrincipal();
+            User user = null;
+            if(principal instanceof org.springframework.security.core.userdetails.User) {
+                user = userService.getUser(((org.springframework.security.core.userdetails.User) principal).getUsername());
+            } else {
+                user = userService.getUser((String) principal);
             }
+            return user;
         } else {
             throw new ServerException("Not Authenticated: " + getAuthentication());
         }
-
-        return null;
     }
 
     private Authentication getAuthentication() {

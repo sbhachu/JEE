@@ -10,14 +10,22 @@
     <!-- Definition of the Authentication Service -->
     <security:http pattern="/oauth/token" create-session="stateless"
                    authentication-manager-ref="clientAuthenticationManager">
-        <security:intercept-url pattern="/oauth/token" method="POST" access="IS_AUTHENTICATED_FULLY"/>
+        <!--<security:intercept-url pattern="/oauth/token" method="POST" access="IS_AUTHENTICATED_FULLY"/>-->
+        <security:anonymous enabled="false"/>
+        <security:http-basic entry-point-ref="clientAuthenticationEntryPoint"/>
+        <security:access-denied-handler ref="oauthAccessDeniedHandler"/>
+    </security:http>
+
+    <!-- User Registration End-Point -->
+    <security:http pattern="/api/v1/register" create-session="stateless" authentication-manager-ref="clientAuthenticationManager">
+        <security:intercept-url pattern="/api/v1/register" method="POST" access="IS_AUTHENTICATED_FULLY"/>
         <security:anonymous enabled="false"/>
         <security:http-basic entry-point-ref="clientAuthenticationEntryPoint"/>
         <security:access-denied-handler ref="oauthAccessDeniedHandler"/>
     </security:http>
 
     <!-- Protected resources -->
-    <security:http pattern="/api/**" create-session="never"  entry-point-ref="oauthAuthenticationEntryPoint">
+    <security:http pattern="/api/**" create-session="never" entry-point-ref="oauthAuthenticationEntryPoint">
         <security:anonymous enabled="false"/>
         <security:intercept-url pattern="/api/**" access="ROLE_USER"/>
         <security:custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER"/>

@@ -5,12 +5,24 @@ import com.sbhachu.oauth.demo.exception.ServerDataAccessException;
 import com.sbhachu.oauth.demo.model.User;
 import com.sbhachu.oauth.demo.model.security.Role;
 import com.sbhachu.oauth.demo.service.IUserService;
+import com.sbhachu.oauth.demo.util.MD5EncoderUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.ClientDetails;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.OAuth2Request;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +34,6 @@ public class UserService implements IUserService {
     public UserDaoImpl userDao;
 
     @Transactional(readOnly = true)
-    @Secured("ROLE_USER")
     public List<User> getAllUsers() throws ServerDataAccessException {
         List<User> users = userDao.findAll();
 
@@ -37,7 +48,6 @@ public class UserService implements IUserService {
     }
 
     @Transactional(readOnly = true)
-    @Secured("ROLE_USER")
     public User getUser(Long id) throws ServerDataAccessException {
         User user = userDao.findById(id);
 
@@ -52,7 +62,6 @@ public class UserService implements IUserService {
     }
 
     @Transactional(readOnly = true)
-    @Secured("ROLE_USER")
     public User getUser(String emailAddress) throws ServerDataAccessException {
         User user = userDao.findByEmailAddress(emailAddress);
 
@@ -71,8 +80,17 @@ public class UserService implements IUserService {
         if (user == null)
             throw new ServerDataAccessException("[E]: Invalid argument.");
 
-        if (user.getEmail() == null)
+        if (StringUtils.isEmpty(user.getFirstName()))
+            throw new ServerDataAccessException("[E]: First name must be provided.");
+
+        if (StringUtils.isEmpty(user.getLastName()))
+            throw new ServerDataAccessException("[E]: Last name must be provided.");
+
+        if (StringUtils.isEmpty(user.getEmail()))
             throw new ServerDataAccessException("[E]: Email address must be provided.");
+
+        if (StringUtils.isEmpty(user.getPassword()))
+            throw new ServerDataAccessException("[E]: Password must be provided.");
 
         if (userDao.findByEmailAddress(user.getEmail()) != null) {
             String errorMessage = String.format("[E]: A user with the email address [%s] already exists.", user.getEmail());
@@ -82,7 +100,8 @@ public class UserService implements IUserService {
         // ensure new accounts are created with minimal privileges
         user.setRole(Role.ROLE_USER);
 
-        // ensure new accounts are enabled (this flag is usually used for email account activation, but for simplicity enable here)
+        // ensure new accounts are enabled (this flag is usually used
+        // for email account activation, but for simplicity enable here)
         user.setEnabled(true);
 
         user.setDateCreated(new Date());
@@ -98,7 +117,7 @@ public class UserService implements IUserService {
 
         user.setId(userId);
 
-        LOGGER.info(String.format("[I]: Created new UserModel: %s ID: %s ", user.getEmail(), userId));
+        LOGGER.info(String.format("[I]: Created new User: %s ID: %s ", user.getEmail(), userId));
 
         return user;
     }
@@ -114,4 +133,6 @@ public class UserService implements IUserService {
     public boolean removeUser(Long id) throws ServerDataAccessException {
         return false;
     }
+
+
 }

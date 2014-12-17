@@ -9,10 +9,7 @@
 
     <oauth:authorization-server client-details-service-ref="clientDetails"
                                 token-services-ref="tokenServices">
-        <oauth:authorization-code/>
-        <oauth:implicit/>
         <oauth:refresh-token/>
-        <oauth:client-credentials/>
         <oauth:password/>
     </oauth:authorization-server>
 
@@ -20,6 +17,7 @@
 
     <bean id="oauthAuthenticationEntryPoint"
           class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+        <property name="realmName" value="demo"/>
         <!--<property name="exceptionRenderer" ref="oauthAccessDeniedRenderer"/>-->
     </bean>
 
